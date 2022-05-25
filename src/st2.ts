@@ -789,6 +789,49 @@ const completionSpec: Fig.Spec = {
         },
       ],
     },
+    {
+      name: "auth",
+      description: "Authenticate user and acquire access token",
+      options: [
+        {
+          name: ["--help", "-h"],
+          description: "Show help for run",
+        },
+        {
+          name: ["--json", "-j"],
+          description: "Print output in JSON format",
+        },
+        {
+          name: ["--yaml", "-y"],
+          description: "Print output in YAML format",
+        },
+        {
+          name: ["--password", "-p"],
+          description:
+            "Password for the user. If password is not provided, it will be prompted for",
+          args: {
+            name: "PASSWORD",
+          },
+        },
+        {
+          name: ["--ttl", "-l"],
+          description:
+            "The life span of the token in seconds. Max TTL configured by the admin supersedes this",
+          args: {
+            name: "TTL",
+          },
+        },
+        {
+          name: ["--token-only", "-t"],
+          description:
+            "On successful authentication, print only token to the console",
+        },
+      ],
+      args: {
+        name: "username",
+        description: "Name of the user to authenticate",
+      },
+    },
   ],
   options: [
     {
