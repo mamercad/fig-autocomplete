@@ -876,6 +876,24 @@ const completionSpec: Fig.Spec = {
         description: "Name of the user to authenticate",
       },
     },
+    {
+      name: "whoami",
+      description: "Display the currently authenticated user",
+      options: [
+        {
+          name: ["--help", "-h"],
+          description: "Show help for run",
+        },
+        {
+          name: ["--json", "-j"],
+          description: "Print output in JSON format",
+        },
+        {
+          name: ["--yaml", "-y"],
+          description: "Print output in YAML format",
+        },
+      ],
+    },
   ],
   options: [
     {
