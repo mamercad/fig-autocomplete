@@ -832,6 +832,50 @@ const completionSpec: Fig.Spec = {
         description: "Name of the user to authenticate",
       },
     },
+    {
+      name: "login",
+      description:
+        "Authenticate user, acquire access token, and update CLI config directory",
+      options: [
+        {
+          name: ["--help", "-h"],
+          description: "Show help for run",
+        },
+        {
+          name: ["--json", "-j"],
+          description: "Print output in JSON format",
+        },
+        {
+          name: ["--yaml", "-y"],
+          description: "Print output in YAML format",
+        },
+        {
+          name: ["--password", "-p"],
+          description:
+            "Password for the user. If password is not provided, it will be prompted for",
+          args: {
+            name: "PASSWORD",
+          },
+        },
+        {
+          name: ["--ttl", "-l"],
+          description:
+            "The life span of the token in seconds. Max TTL configured by the admin supersedes this",
+          args: {
+            name: "TTL",
+          },
+        },
+        {
+          name: ["--write-password", "-w"],
+          description:
+            "Write the password in plain text to the config file (default is to omit it)",
+        },
+      ],
+      args: {
+        name: "username",
+        description: "Name of the user to authenticate",
+      },
+    },
   ],
   options: [
     {
