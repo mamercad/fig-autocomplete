@@ -1,42 +1,59 @@
-import { trace } from "console";
-
-const commonOptions: Fig.Option[] = [
+const helpOption: Fig.Option[] = [
   {
     name: ["--help", "-h"],
-    description: "Show help for run",
+    description: "Show help",
   },
+];
+
+const tokenOption: Fig.Option[] = [
   {
     name: ["--token", "-t"],
     description:
       "Access token for user authentication; $ST2_AUTH_TOKEN by default",
   },
+];
+
+const tokenOnlyOption: Fig.Option[] = [
+  {
+    name: ["--token-only", "-t"],
+    description:
+      "On successful authentication, print only token to the console",
+  },
+];
+
+const apiKeyOption: Fig.Option[] = [
   {
     name: "--api-key",
     description: "Api Key for user authentication; $ST2_API_KEY by default",
   },
+];
+
+const jsonOption: Fig.Option[] = [
   {
     name: ["--json", "-j"],
     description: "Print output in JSON format",
   },
+];
+
+const yamlOption: Fig.Option[] = [
   {
     name: ["--yaml", "-y"],
     description: "Print output in YAML format",
   },
 ];
 
+const commonOptions: Fig.Option[] = [
+  ...helpOption,
+  ...tokenOption,
+  ...apiKeyOption,
+  ...jsonOption,
+  ...yamlOption,
+];
+
 const helpJsonYamlOption: Fig.Option[] = [
-  {
-    name: ["--help", "-h"],
-    description: "Show help for run",
-  },
-  {
-    name: ["--json", "-j"],
-    description: "Print output in JSON format",
-  },
-  {
-    name: ["--yaml", "-y"],
-    description: "Print output in YAML format",
-  },
+  ...helpOption,
+  ...jsonOption,
+  ...yamlOption,
 ];
 
 const attrOption: Fig.Option[] = [
@@ -170,6 +187,14 @@ const passwordOption: Fig.Option[] = [
   },
 ];
 
+const writePasswordOption: Fig.Option[] = [
+  {
+    name: ["--write-password", "-w"],
+    description:
+      "Write the password in plain text to the config file (default is to omit it)",
+  },
+];
+
 const ttlOption: Fig.Option[] = [
   {
     name: ["--ttl", "-l"],
@@ -178,6 +203,13 @@ const ttlOption: Fig.Option[] = [
     args: {
       name: "TTL",
     },
+  },
+];
+
+const removeFilesOption: Fig.Option[] = [
+  {
+    name: ["--remove-files", "-r"],
+    description: "Remove action files from disk",
   },
 ];
 
@@ -266,13 +298,7 @@ const completionSpec: Fig.Spec = {
         {
           name: "delete",
           description: "Delete an existing action",
-          options: [
-            ...commonOptions,
-            {
-              name: ["--remove-files", "-r"],
-              description: "Remove action files from disk",
-            },
-          ],
+          options: [...commonOptions, ...removeFilesOption],
           args: {
             name: "ref-or-id",
             description: "Reference or ID of the action",
@@ -407,11 +433,7 @@ const completionSpec: Fig.Spec = {
         ...helpJsonYamlOption,
         ...passwordOption,
         ...ttlOption,
-        {
-          name: ["--token-only", "-t"],
-          description:
-            "On successful authentication, print only token to the console",
-        },
+        ...tokenOnlyOption,
       ],
       args: {
         name: "username",
@@ -426,11 +448,7 @@ const completionSpec: Fig.Spec = {
         ...helpJsonYamlOption,
         ...passwordOption,
         ...ttlOption,
-        {
-          name: ["--write-password", "-w"],
-          description:
-            "Write the password in plain text to the config file (default is to omit it)",
-        },
+        ...writePasswordOption,
       ],
       args: {
         name: "username",
@@ -440,6 +458,11 @@ const completionSpec: Fig.Spec = {
     {
       name: "whoami",
       description: "Display the currently authenticated user",
+      options: [...helpJsonYamlOption],
+    },
+    {
+      name: "apikey",
+      description: "API Keys",
       options: [...helpJsonYamlOption],
     },
   ],
