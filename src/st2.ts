@@ -419,6 +419,29 @@ const completionSpec: Fig.Spec = {
       name: "apikey",
       description: "API Keys",
       options: [...helpJsonYamlOption],
+      subcommands: [
+        {
+          name: "list",
+          description: "Get the list of api keys",
+          options: [
+            ...commonOptions,
+            ...widthOption,
+            ...userOption,
+            ...detailOption,
+            {
+              name: "--show-secrets",
+              description: "Full list of attributes",
+            },
+          ],
+        },
+      ],
+      // list                Get the list of api keys.
+      // get                 Get individual api key.
+      // create              Create a new api key.
+      // delete              Delete an existing api key.
+      // enable              Enable an existing api key.
+      // disable             Disable an existing api key.
+      // load                Load api key from a file.
     },
   ],
   options: [
