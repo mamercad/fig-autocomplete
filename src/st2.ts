@@ -213,6 +213,35 @@ const removeFilesOption: Fig.Option[] = [
   },
 ];
 
+const refOrIdArg: Fig.Arg[] = [
+  {
+    name: "ref-or-id",
+    description: "Action reference (pack.action_name)",
+  },
+];
+
+const parametersArg: Fig.Arg[] = [
+  {
+    name: "parameters",
+    description: "List of keyword args, positional args, and optional args",
+  },
+];
+
+const fileArg: Fig.Arg[] = [
+  {
+    name: "file",
+    description: "JSON/YAML file containing the definition to create",
+    template: "filepaths",
+  },
+];
+
+const usernameArg: Fig.Arg[] = [
+  {
+    name: "username",
+    description: "Name of the user to authenticate",
+  },
+];
+
 const completionSpec: Fig.Spec = {
   name: "st2",
   description: "CLI for StackStorm event-driven automation platform",
@@ -235,18 +264,7 @@ const completionSpec: Fig.Spec = {
         ...inheritEnvOption,
         ...userOption,
       ],
-      args: [
-        {
-          name: "ref-or-id",
-          description:
-            "Action reference (pack.action_name) or ID of the action",
-        },
-        {
-          name: "parameters",
-          description:
-            "List of keyword args, positional args, and optional args for the action",
-        },
-      ],
+      args: [...refOrIdArg, ...parametersArg],
     },
     {
       name: "action",
@@ -262,65 +280,37 @@ const completionSpec: Fig.Spec = {
           name: "get",
           description: "Get individual action",
           options: [...commonOptions, ...attrOption],
-          args: {
-            name: "ref-or-id",
-            isVariadic: true,
-            description:
-              "Action reference (pack.action_name) or ID of the action",
-          },
+          ...refOrIdArg,
         },
         {
           name: "create",
           description: "Create a new action",
           options: [...commonOptions],
-          args: {
-            name: "file",
-            description: "JSON/YAML file containing the action to create",
-            template: "filepaths",
-          },
+          ...fileArg,
         },
         {
           name: "update",
           description: "Update an existing action",
           options: [...commonOptions],
-          args: [
-            {
-              name: "ref-or-id",
-              description: "Reference or ID of the action",
-            },
-            {
-              name: "file",
-              description: "JSON/YAML file containing the action to update",
-              template: "filepaths",
-            },
-          ],
+          args: [...refOrIdArg, ...fileArg],
         },
         {
           name: "delete",
           description: "Delete an existing action",
           options: [...commonOptions, ...removeFilesOption],
-          args: {
-            name: "ref-or-id",
-            description: "Reference or ID of the action",
-          },
+          ...refOrIdArg,
         },
         {
           name: "enable",
           description: "Enable an existing action",
           options: [...commonOptions],
-          args: {
-            name: "ref-or-id",
-            description: "Reference or ID of the action",
-          },
+          ...refOrIdArg,
         },
         {
           name: "disable",
           description: "Disable an existing action",
           options: [...commonOptions],
-          args: {
-            name: "ref-or-id",
-            description: "Reference or ID of the action",
-          },
+          ...refOrIdArg,
         },
         {
           name: "execute",
@@ -337,10 +327,7 @@ const completionSpec: Fig.Spec = {
             ...asyncOption,
             ...inheritEnvOption,
           ],
-          args: {
-            name: "ref-or-id",
-            description: "Reference or ID of the action",
-          },
+          ...refOrIdArg,
         },
       ],
     },
@@ -362,48 +349,25 @@ const completionSpec: Fig.Spec = {
           name: "get",
           description: "Get individual action alias",
           options: [...commonOptions, ...attrOption],
-          args: {
-            name: "ref-or-id",
-            isVariadic: true,
-            description:
-              "Action reference (pack.action_name) or ID of the action alias",
-          },
+          ...refOrIdArg,
         },
         {
           name: "create",
           description: "Create a new action alias",
           options: [...commonOptions],
-          args: {
-            name: "file",
-            description: "JSON/YAML file containing the action alias to create",
-            template: "filepaths",
-          },
+          ...fileArg,
         },
         {
           name: "update",
           description: "Update an existing action alias",
           options: [...commonOptions],
-          args: [
-            {
-              name: "ref-or-id",
-              description: "Reference or ID of the action alias",
-            },
-            {
-              name: "file",
-              description:
-                "JSON/YAML file containing the action alias to update",
-              template: "filepaths",
-            },
-          ],
+          args: [...refOrIdArg, ...fileArg],
         },
         {
           name: "delete",
           description: "Delete an existing action alias",
           options: [...commonOptions],
-          args: {
-            name: "ref-or-id",
-            description: "Reference or ID of the action alias",
-          },
+          ...refOrIdArg,
         },
         {
           name: "match",
@@ -419,10 +383,7 @@ const completionSpec: Fig.Spec = {
           description:
             "Execute the command text by finding a matching action alias",
           options: [...commonOptions, ...userOption],
-          args: {
-            name: "ref-or-id",
-            description: "Reference or ID of the action",
-          },
+          ...refOrIdArg,
         },
       ],
     },
@@ -435,10 +396,7 @@ const completionSpec: Fig.Spec = {
         ...ttlOption,
         ...tokenOnlyOption,
       ],
-      args: {
-        name: "username",
-        description: "Name of the user to authenticate",
-      },
+      ...usernameArg,
     },
     {
       name: "login",
@@ -450,10 +408,7 @@ const completionSpec: Fig.Spec = {
         ...ttlOption,
         ...writePasswordOption,
       ],
-      args: {
-        name: "username",
-        description: "Name of the user to authenticate",
-      },
+      ...usernameArg,
     },
     {
       name: "whoami",
@@ -467,10 +422,7 @@ const completionSpec: Fig.Spec = {
     },
   ],
   options: [
-    {
-      name: ["--help", "-h"],
-      description: "Show help for st2",
-    },
+    ...helpOption,
     {
       name: "--version",
       description: "Show version for st2",
