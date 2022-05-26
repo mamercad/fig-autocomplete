@@ -242,6 +242,13 @@ const usernameArg: Fig.Arg[] = [
   },
 ];
 
+const keyOrIdArg: Fig.Arg[] = [
+  {
+    name: "key-or-id",
+    description: "Key_Or_Id of the api key",
+  },
+];
+
 const completionSpec: Fig.Spec = {
   name: "st2",
   description: "CLI for StackStorm event-driven automation platform",
@@ -434,8 +441,13 @@ const completionSpec: Fig.Spec = {
             },
           ],
         },
+        {
+          name: "get",
+          description: "Get individual api key",
+          options: [...commonOptions, ...attrOption],
+          ...keyOrIdArg,
+        },
       ],
-      // list                Get the list of api keys.
       // get                 Get individual api key.
       // create              Create a new api key.
       // delete              Delete an existing api key.
