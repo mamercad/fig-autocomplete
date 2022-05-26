@@ -1,3 +1,186 @@
+import { trace } from "console";
+
+const commonOptions: Fig.Option[] = [
+  {
+    name: ["--help", "-h"],
+    description: "Show help for run",
+  },
+  {
+    name: ["--token", "-t"],
+    description:
+      "Access token for user authentication; $ST2_AUTH_TOKEN by default",
+  },
+  {
+    name: "--api-key",
+    description: "Api Key for user authentication; $ST2_API_KEY by default",
+  },
+  {
+    name: ["--json", "-j"],
+    description: "Print output in JSON format",
+  },
+  {
+    name: ["--yaml", "-y"],
+    description: "Print output in YAML format",
+  },
+];
+
+const helpJsonYamlOption: Fig.Option[] = [
+  {
+    name: ["--help", "-h"],
+    description: "Show help for run",
+  },
+  {
+    name: ["--json", "-j"],
+    description: "Print output in JSON format",
+  },
+  {
+    name: ["--yaml", "-y"],
+    description: "Print output in YAML format",
+  },
+];
+
+const attrOption: Fig.Option[] = [
+  {
+    name: "--attr",
+    description:
+      "List of attributes to include in the output; 'all' or unspecified will return all attributes",
+    args: {
+      name: "ATTR",
+      isVariadic: true,
+      suggestions: ["all"],
+    },
+  },
+];
+
+const keyOption: Fig.Option[] = [
+  {
+    name: ["--key", "-k"],
+    description:
+      "If result is type of JSON, then print specific key-value pair; dot notation for nested JSON is supported",
+    args: {
+      name: "KEY",
+    },
+  },
+];
+
+const detailOption: Fig.Option[] = [
+  {
+    name: ["--detail", "-d"],
+    description: "Display full detail of the execution in table format",
+  },
+];
+
+const widthOption: Fig.Option[] = [
+  {
+    name: ["--width", "-w"],
+    description: "Set the width of columns in output",
+    args: {
+      name: "WIDTH",
+      isVariadic: true,
+      suggestions: ["25"],
+    },
+  },
+];
+
+const packOption: Fig.Option[] = [
+  {
+    name: ["--pack", "-p"],
+    description: "Only return resources belonging to the provided pack",
+    args: {
+      name: "PACK",
+      isVariadic: true,
+      suggestions: ["core"],
+    },
+  },
+];
+
+const delayOption: Fig.Option[] = [
+  {
+    name: "--delay",
+    description:
+      "How long (in milliseconds) to delay the execution before scheduling",
+    args: {
+      name: "DELAY",
+    },
+  },
+];
+
+const tailOption: Fig.Option[] = [
+  {
+    name: "--tail",
+    description: "Automatically start tailing new execution",
+  },
+];
+
+const traceOptions: Fig.Option[] = [
+  {
+    name: ["--trace-tag", "--trace_tag"],
+    description: "A trace tag string to track execution later",
+    args: {
+      name: "TRACE_TAG",
+    },
+  },
+  {
+    name: "--trace-id",
+    description: "Existing trace id for this execution",
+    args: {
+      name: "TRACE_ID",
+    },
+  },
+];
+
+const autoDictOption: Fig.Option[] = [
+  {
+    name: "--auto-dict",
+    description:
+      "Automatically convert list items to dictionaries when colons are detected",
+  },
+];
+
+const asyncOption: Fig.Option[] = [
+  {
+    name: ["--async", "-a"],
+    description: "Do not wait for action to finish",
+  },
+];
+
+const inheritEnvOption: Fig.Option[] = [
+  {
+    name: ["--inherit-env", "-e"],
+    description:
+      "Pass all the environment variables which are accessible to the CLI as 'env' parameter to the action; only works with python, local and remote runners",
+  },
+];
+
+const userOption: Fig.Option[] = [
+  {
+    name: ["--user", "-u"],
+    description: "User under which to run the action (admins only)",
+  },
+];
+
+const passwordOption: Fig.Option[] = [
+  {
+    name: ["--password", "-p"],
+    description:
+      "Password for the user. If password is not provided, it will be prompted for",
+    args: {
+      name: "PASSWORD",
+    },
+  },
+];
+
+const ttlOption: Fig.Option[] = [
+  {
+    name: ["--ttl", "-l"],
+    description:
+      "The life span of the token in seconds. Max TTL configured by the admin supersedes this",
+    args: {
+      name: "TTL",
+    },
+  },
+];
+
 const completionSpec: Fig.Spec = {
   name: "st2",
   description: "CLI for StackStorm event-driven automation platform",
@@ -9,94 +192,16 @@ const completionSpec: Fig.Spec = {
       name: "run",
       description: "Invoke an action manually",
       options: [
-        {
-          name: ["--help", "-h"],
-          description: "Show help for run",
-        },
-        {
-          name: ["--token", "-t"],
-          description:
-            "Access token for user authentication; $ST2_AUTH_TOKEN by default",
-        },
-        {
-          name: "--api-key",
-          description:
-            "Api Key for user authentication; $ST2_API_KEY by default",
-        },
-        {
-          name: ["--json", "-j"],
-          description: "Print output in JSON format",
-        },
-        {
-          name: ["--yaml", "-y"],
-          description: "Print output in YAML format",
-        },
-        {
-          name: "--attr",
-          description:
-            "List of attributes to include in the output; 'all' or unspecified will return all attributes",
-          args: {
-            name: "ATTR",
-            isVariadic: true,
-            suggestions: ["all"],
-          },
-        },
-        {
-          name: ["--detail", "-d"],
-          description: "Display full detail of the execution in table format",
-        },
-        {
-          name: ["--key", "-k"],
-          description:
-            "If result is type of JSON, then print specific key-value pair; dot notation for nested JSON is supported",
-          args: {
-            name: "KEY",
-          },
-        },
-        {
-          name: "--delay",
-          description:
-            "How long (in milliseconds) to delay the execution before scheduling",
-          args: {
-            name: "DELAY",
-          },
-        },
-        {
-          name: "--tail",
-          description: "Automatically start tailing new execution",
-        },
-        {
-          name: "--auto-dict",
-          description:
-            "Automatically convert list items to dictionaries when colons are detected",
-        },
-        {
-          name: ["--trace-tag", "--trace_tag"],
-          description: "A trace tag string to track execution later",
-          args: {
-            name: "TRACE_TAG",
-          },
-        },
-        {
-          name: "--trace-id",
-          description: "Existing trace id for this execution",
-          args: {
-            name: "TRACE_ID",
-          },
-        },
-        {
-          name: ["--async", "-a"],
-          description: "Do not wait for action to finish",
-        },
-        {
-          name: ["--inherit-env", "-e"],
-          description:
-            "Pass all the environment variables which are accessible to the CLI as 'env' parameter to the action; only works with python, local and remote runners",
-        },
-        {
-          name: ["--user", "-u"],
-          description: "User under which to run the action (admins only)",
-        },
+        ...commonOptions,
+        ...attrOption,
+        ...detailOption,
+        ...keyOption,
+        ...delayOption,
+        ...tailOption,
+        ...autoDictOption,
+        ...asyncOption,
+        ...inheritEnvOption,
+        ...userOption,
       ],
       args: [
         {
@@ -119,97 +224,12 @@ const completionSpec: Fig.Spec = {
         {
           name: "list",
           description: "Get the list of actions",
-          options: [
-            {
-              name: ["--help", "-h"],
-              description: "Show help for run",
-            },
-            {
-              name: ["--token", "-t"],
-              description:
-                "Access token for user authentication; $ST2_AUTH_TOKEN by default",
-            },
-            {
-              name: "--api-key",
-              description:
-                "Api Key for user authentication; $ST2_API_KEY by default",
-            },
-            {
-              name: ["--json", "-j"],
-              description: "Print output in JSON format",
-            },
-            {
-              name: ["--yaml", "-y"],
-              description: "Print output in YAML format",
-            },
-            {
-              name: "--attr",
-              description:
-                "List of attributes to include in the output; 'all' or unspecified will return all attributes",
-              args: {
-                name: "ATTR",
-                isVariadic: true,
-                suggestions: ["all"],
-              },
-            },
-            {
-              name: ["--width", "-w"],
-              description: "Set the width of columns in output",
-              args: {
-                name: "WIDTH",
-                isVariadic: true,
-                suggestions: ["25"],
-              },
-            },
-            {
-              name: ["--pack", "-p"],
-              description:
-                "Only return resources belonging to the provided pack",
-              args: {
-                name: "PACK",
-                isVariadic: true,
-                suggestions: ["core"],
-              },
-            },
-          ],
+          options: [...commonOptions, ...attrOption, ...widthOption],
         },
         {
           name: "get",
           description: "Get individual action",
-          options: [
-            {
-              name: ["--help", "-h"],
-              description: "Show help for run",
-            },
-            {
-              name: ["--token", "-t"],
-              description:
-                "Access token for user authentication; $ST2_AUTH_TOKEN by default",
-            },
-            {
-              name: "--api-key",
-              description:
-                "Api Key for user authentication; $ST2_API_KEY by default",
-            },
-            {
-              name: ["--json", "-j"],
-              description: "Print output in JSON format",
-            },
-            {
-              name: ["--yaml", "-y"],
-              description: "Print output in YAML format",
-            },
-            {
-              name: "--attr",
-              description:
-                "List of attributes to include in the output; 'all' or unspecified will return all attributes",
-              args: {
-                name: "ATTR",
-                isVariadic: true,
-                suggestions: ["all"],
-              },
-            },
-          ],
+          options: [...commonOptions, ...attrOption],
           args: {
             name: "ref-or-id",
             isVariadic: true,
@@ -220,30 +240,7 @@ const completionSpec: Fig.Spec = {
         {
           name: "create",
           description: "Create a new action",
-          options: [
-            {
-              name: ["--help", "-h"],
-              description: "Show help for run",
-            },
-            {
-              name: ["--token", "-t"],
-              description:
-                "Access token for user authentication; $ST2_AUTH_TOKEN by default",
-            },
-            {
-              name: "--api-key",
-              description:
-                "Api Key for user authentication; $ST2_API_KEY by default",
-            },
-            {
-              name: ["--json", "-j"],
-              description: "Print output in JSON format",
-            },
-            {
-              name: ["--yaml", "-y"],
-              description: "Print output in YAML format",
-            },
-          ],
+          options: [...commonOptions],
           args: {
             name: "file",
             description: "JSON/YAML file containing the action to create",
@@ -253,30 +250,7 @@ const completionSpec: Fig.Spec = {
         {
           name: "update",
           description: "Update an existing action",
-          options: [
-            {
-              name: ["--help", "-h"],
-              description: "Show help for run",
-            },
-            {
-              name: ["--token", "-t"],
-              description:
-                "Access token for user authentication; $ST2_AUTH_TOKEN by default",
-            },
-            {
-              name: "--api-key",
-              description:
-                "Api Key for user authentication; $ST2_API_KEY by default",
-            },
-            {
-              name: ["--json", "-j"],
-              description: "Print output in JSON format",
-            },
-            {
-              name: ["--yaml", "-y"],
-              description: "Print output in YAML format",
-            },
-          ],
+          options: [...commonOptions],
           args: [
             {
               name: "ref-or-id",
@@ -293,28 +267,7 @@ const completionSpec: Fig.Spec = {
           name: "delete",
           description: "Delete an existing action",
           options: [
-            {
-              name: ["--help", "-h"],
-              description: "Show help for run",
-            },
-            {
-              name: ["--token", "-t"],
-              description:
-                "Access token for user authentication; $ST2_AUTH_TOKEN by default",
-            },
-            {
-              name: "--api-key",
-              description:
-                "Api Key for user authentication; $ST2_API_KEY by default",
-            },
-            {
-              name: ["--json", "-j"],
-              description: "Print output in JSON format",
-            },
-            {
-              name: ["--yaml", "-y"],
-              description: "Print output in YAML format",
-            },
+            ...commonOptions,
             {
               name: ["--remove-files", "-r"],
               description: "Remove action files from disk",
@@ -328,30 +281,7 @@ const completionSpec: Fig.Spec = {
         {
           name: "enable",
           description: "Enable an existing action",
-          options: [
-            {
-              name: ["--help", "-h"],
-              description: "Show help for run",
-            },
-            {
-              name: ["--token", "-t"],
-              description:
-                "Access token for user authentication; $ST2_AUTH_TOKEN by default",
-            },
-            {
-              name: "--api-key",
-              description:
-                "Api Key for user authentication; $ST2_API_KEY by default",
-            },
-            {
-              name: ["--json", "-j"],
-              description: "Print output in JSON format",
-            },
-            {
-              name: ["--yaml", "-y"],
-              description: "Print output in YAML format",
-            },
-          ],
+          options: [...commonOptions],
           args: {
             name: "ref-or-id",
             description: "Reference or ID of the action",
@@ -360,30 +290,7 @@ const completionSpec: Fig.Spec = {
         {
           name: "disable",
           description: "Disable an existing action",
-          options: [
-            {
-              name: ["--help", "-h"],
-              description: "Show help for run",
-            },
-            {
-              name: ["--token", "-t"],
-              description:
-                "Access token for user authentication; $ST2_AUTH_TOKEN by default",
-            },
-            {
-              name: "--api-key",
-              description:
-                "Api Key for user authentication; $ST2_API_KEY by default",
-            },
-            {
-              name: ["--json", "-j"],
-              description: "Print output in JSON format",
-            },
-            {
-              name: ["--yaml", "-y"],
-              description: "Print output in YAML format",
-            },
-          ],
+          options: [...commonOptions],
           args: {
             name: "ref-or-id",
             description: "Reference or ID of the action",
@@ -393,91 +300,16 @@ const completionSpec: Fig.Spec = {
           name: "execute",
           description: "Invoke an action manually",
           options: [
-            {
-              name: ["--help", "-h"],
-              description: "Show help for run",
-            },
-            {
-              name: ["--token", "-t"],
-              description:
-                "Access token for user authentication; $ST2_AUTH_TOKEN by default",
-            },
-            {
-              name: "--api-key",
-              description:
-                "Api Key for user authentication; $ST2_API_KEY by default",
-            },
-            {
-              name: ["--json", "-j"],
-              description: "Print output in JSON format",
-            },
-            {
-              name: ["--yaml", "-y"],
-              description: "Print output in YAML format",
-            },
-            {
-              name: "--attr",
-              description:
-                "List of attributes to include in the output; 'all' or unspecified will return all attributes",
-              args: {
-                name: "ATTR",
-                isVariadic: true,
-                suggestions: ["all"],
-              },
-            },
-            {
-              name: ["--detail", "-d"],
-              description:
-                "Display full detail of the execution in table format",
-            },
-            {
-              name: ["--key", "-k"],
-              description:
-                "If result is type of JSON, then print specific key-value pair; dot notation for nested JSON is supported",
-              args: {
-                name: "KEY",
-              },
-            },
-            {
-              name: "--delay",
-              description:
-                "How long (in milliseconds) to delay the execution before scheduling",
-              args: {
-                name: "DELAY",
-              },
-            },
-            {
-              name: "--tail",
-              description: "Automatically start tailing new execution",
-            },
-            {
-              name: "--auto-dict",
-              description:
-                "Automatically convert list items to dictionaries when colons are detected",
-            },
-            {
-              name: ["--trace-tag", "--trace_tag"],
-              description: "A trace tag string to track execution later",
-              args: {
-                name: "TRACE_TAG",
-              },
-            },
-            {
-              name: "--trace-id",
-              description: "Existing trace id for this execution",
-              args: {
-                name: "TRACE_ID",
-              },
-            },
-            {
-              name: ["--async", "-a"],
-              description: "Do not wait for action to finish",
-            },
-            {
-              name: ["--inherit-env", "-e"],
-              description:
-                "Pass all the environment variables which are accessible to the CLI as 'env' parameter to the action; only works with python, local and remote runners",
-            },
+            ...commonOptions,
+            ...attrOption,
+            ...detailOption,
+            ...keyOption,
+            ...delayOption,
+            ...tailOption,
+            ...autoDictOption,
+            ...traceOptions,
+            ...asyncOption,
+            ...inheritEnvOption,
           ],
           args: {
             name: "ref-or-id",
@@ -494,96 +326,16 @@ const completionSpec: Fig.Spec = {
           name: "list",
           description: "Get the list of actions",
           options: [
-            {
-              name: ["--help", "-h"],
-              description: "Show help for run",
-            },
-            {
-              name: ["--token", "-t"],
-              description:
-                "Access token for user authentication; $ST2_AUTH_TOKEN by default",
-            },
-            {
-              name: "--api-key",
-              description:
-                "Api Key for user authentication; $ST2_API_KEY by default",
-            },
-            {
-              name: ["--json", "-j"],
-              description: "Print output in JSON format",
-            },
-            {
-              name: ["--yaml", "-y"],
-              description: "Print output in YAML format",
-            },
-            {
-              name: "--attr",
-              description:
-                "List of attributes to include in the output; 'all' or unspecified will return all attributes",
-              args: {
-                name: "ATTR",
-                isVariadic: true,
-                suggestions: ["all"],
-              },
-            },
-            {
-              name: ["--width", "-w"],
-              description: "Set the width of columns in output",
-              args: {
-                name: "WIDTH",
-                isVariadic: true,
-                suggestions: ["25"],
-              },
-            },
-            {
-              name: ["--pack", "-p"],
-              description:
-                "Only return resources belonging to the provided pack",
-              args: {
-                name: "PACK",
-                isVariadic: true,
-                suggestions: ["core"],
-              },
-            },
+            ...commonOptions,
+            ...attrOption,
+            ...widthOption,
+            ...packOption,
           ],
         },
         {
           name: "get",
           description: "Get individual action alias",
-          options: [
-            {
-              name: ["--help", "-h"],
-              description: "Show help for run",
-            },
-            {
-              name: ["--token", "-t"],
-              description:
-                "Access token for user authentication; $ST2_AUTH_TOKEN by default",
-            },
-            {
-              name: "--api-key",
-              description:
-                "Api Key for user authentication; $ST2_API_KEY by default",
-            },
-            {
-              name: ["--json", "-j"],
-              description: "Print output in JSON format",
-            },
-            {
-              name: ["--yaml", "-y"],
-              description: "Print output in YAML format",
-            },
-            {
-              name: "--attr",
-              description:
-                "List of attributes to include in the output; 'all' or unspecified will return all attributes",
-              args: {
-                name: "ATTR",
-                isVariadic: true,
-                suggestions: ["all"],
-              },
-            },
-          ],
+          options: [...commonOptions, ...attrOption],
           args: {
             name: "ref-or-id",
             isVariadic: true,
@@ -594,30 +346,7 @@ const completionSpec: Fig.Spec = {
         {
           name: "create",
           description: "Create a new action alias",
-          options: [
-            {
-              name: ["--help", "-h"],
-              description: "Show help for run",
-            },
-            {
-              name: ["--token", "-t"],
-              description:
-                "Access token for user authentication; $ST2_AUTH_TOKEN by default",
-            },
-            {
-              name: "--api-key",
-              description:
-                "Api Key for user authentication; $ST2_API_KEY by default",
-            },
-            {
-              name: ["--json", "-j"],
-              description: "Print output in JSON format",
-            },
-            {
-              name: ["--yaml", "-y"],
-              description: "Print output in YAML format",
-            },
-          ],
+          options: [...commonOptions],
           args: {
             name: "file",
             description: "JSON/YAML file containing the action alias to create",
@@ -627,30 +356,7 @@ const completionSpec: Fig.Spec = {
         {
           name: "update",
           description: "Update an existing action alias",
-          options: [
-            {
-              name: ["--help", "-h"],
-              description: "Show help for run",
-            },
-            {
-              name: ["--token", "-t"],
-              description:
-                "Access token for user authentication; $ST2_AUTH_TOKEN by default",
-            },
-            {
-              name: "--api-key",
-              description:
-                "Api Key for user authentication; $ST2_API_KEY by default",
-            },
-            {
-              name: ["--json", "-j"],
-              description: "Print output in JSON format",
-            },
-            {
-              name: ["--yaml", "-y"],
-              description: "Print output in YAML format",
-            },
-          ],
+          options: [...commonOptions],
           args: [
             {
               name: "ref-or-id",
@@ -667,30 +373,7 @@ const completionSpec: Fig.Spec = {
         {
           name: "delete",
           description: "Delete an existing action alias",
-          options: [
-            {
-              name: ["--help", "-h"],
-              description: "Show help for run",
-            },
-            {
-              name: ["--token", "-t"],
-              description:
-                "Access token for user authentication; $ST2_AUTH_TOKEN by default",
-            },
-            {
-              name: "--api-key",
-              description:
-                "Api Key for user authentication; $ST2_API_KEY by default",
-            },
-            {
-              name: ["--json", "-j"],
-              description: "Print output in JSON format",
-            },
-            {
-              name: ["--yaml", "-y"],
-              description: "Print output in YAML format",
-            },
-          ],
+          options: [...commonOptions],
           args: {
             name: "ref-or-id",
             description: "Reference or ID of the action alias",
@@ -699,49 +382,7 @@ const completionSpec: Fig.Spec = {
         {
           name: "match",
           description: "Get the action alias that match the command text",
-          options: [
-            {
-              name: ["--help", "-h"],
-              description: "Show help for run",
-            },
-            {
-              name: ["--token", "-t"],
-              description:
-                "Access token for user authentication; $ST2_AUTH_TOKEN by default",
-            },
-            {
-              name: "--api-key",
-              description:
-                "Api Key for user authentication; $ST2_API_KEY by default",
-            },
-            {
-              name: ["--json", "-j"],
-              description: "Print output in JSON format",
-            },
-            {
-              name: ["--yaml", "-y"],
-              description: "Print output in YAML format",
-            },
-            {
-              name: "--attr",
-              description:
-                "List of attributes to include in the output; 'all' or unspecified will return all attributes",
-              args: {
-                name: "ATTR",
-                isVariadic: true,
-                suggestions: ["all"],
-              },
-            },
-            {
-              name: ["--width", "-w"],
-              description: "Set the width of columns in output",
-              args: {
-                name: "WIDTH",
-                isVariadic: true,
-                suggestions: ["25"],
-              },
-            },
-          ],
+          options: [...commonOptions, ...attrOption, ...widthOption],
           args: {
             name: "command",
             description: "Get the action alias that match the command text",
@@ -751,37 +392,7 @@ const completionSpec: Fig.Spec = {
           name: "execute",
           description:
             "Execute the command text by finding a matching action alias",
-          options: [
-            {
-              name: ["--help", "-h"],
-              description: "Show help for run",
-            },
-            {
-              name: ["--token", "-t"],
-              description:
-                "Access token for user authentication; $ST2_AUTH_TOKEN by default",
-            },
-            {
-              name: "--api-key",
-              description:
-                "Api Key for user authentication; $ST2_API_KEY by default",
-            },
-            {
-              name: ["--json", "-j"],
-              description: "Print output in JSON format",
-            },
-            {
-              name: ["--yaml", "-y"],
-              description: "Print output in YAML format",
-            },
-            {
-              name: ["--user", "-u"],
-              description: "User under which to run the action (admins only)",
-              args: {
-                name: "USER",
-              },
-            },
-          ],
+          options: [...commonOptions, ...userOption],
           args: {
             name: "ref-or-id",
             description: "Reference or ID of the action",
@@ -793,34 +404,9 @@ const completionSpec: Fig.Spec = {
       name: "auth",
       description: "Authenticate user and acquire access token",
       options: [
-        {
-          name: ["--help", "-h"],
-          description: "Show help for run",
-        },
-        {
-          name: ["--json", "-j"],
-          description: "Print output in JSON format",
-        },
-        {
-          name: ["--yaml", "-y"],
-          description: "Print output in YAML format",
-        },
-        {
-          name: ["--password", "-p"],
-          description:
-            "Password for the user. If password is not provided, it will be prompted for",
-          args: {
-            name: "PASSWORD",
-          },
-        },
-        {
-          name: ["--ttl", "-l"],
-          description:
-            "The life span of the token in seconds. Max TTL configured by the admin supersedes this",
-          args: {
-            name: "TTL",
-          },
-        },
+        ...helpJsonYamlOption,
+        ...passwordOption,
+        ...ttlOption,
         {
           name: ["--token-only", "-t"],
           description:
@@ -837,34 +423,9 @@ const completionSpec: Fig.Spec = {
       description:
         "Authenticate user, acquire access token, and update CLI config directory",
       options: [
-        {
-          name: ["--help", "-h"],
-          description: "Show help for run",
-        },
-        {
-          name: ["--json", "-j"],
-          description: "Print output in JSON format",
-        },
-        {
-          name: ["--yaml", "-y"],
-          description: "Print output in YAML format",
-        },
-        {
-          name: ["--password", "-p"],
-          description:
-            "Password for the user. If password is not provided, it will be prompted for",
-          args: {
-            name: "PASSWORD",
-          },
-        },
-        {
-          name: ["--ttl", "-l"],
-          description:
-            "The life span of the token in seconds. Max TTL configured by the admin supersedes this",
-          args: {
-            name: "TTL",
-          },
-        },
+        ...helpJsonYamlOption,
+        ...passwordOption,
+        ...ttlOption,
         {
           name: ["--write-password", "-w"],
           description:
@@ -879,20 +440,7 @@ const completionSpec: Fig.Spec = {
     {
       name: "whoami",
       description: "Display the currently authenticated user",
-      options: [
-        {
-          name: ["--help", "-h"],
-          description: "Show help for run",
-        },
-        {
-          name: ["--json", "-j"],
-          description: "Print output in JSON format",
-        },
-        {
-          name: ["--yaml", "-y"],
-          description: "Print output in YAML format",
-        },
-      ],
+      options: [...helpJsonYamlOption],
     },
   ],
   options: [
